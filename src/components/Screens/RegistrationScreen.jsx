@@ -1,5 +1,6 @@
 
-import { StyleSheet, Button, TextInput, Text, View } from 'react-native';
+import { StyleSheet, TextInput, Text, View } from 'react-native';
+import Button from '../Button';
 
 const RegistrationScreen = () => {
   return(
@@ -13,10 +14,9 @@ const RegistrationScreen = () => {
       />
     <TextInput style={styles.textInput}
       placeholder="Пароль"
-    />
-    <Button style={styles.button}
-      title='Зарегистрироваться'/>
-    <Text>Уже есть аккаунт? Войти</Text>
+      />
+    <Button/>
+    <Text style={styles.text}>Уже есть аккаунт? Войти</Text>
   </View>
  )}
 
@@ -29,7 +29,9 @@ const styles = StyleSheet.create({
     lineHeight: 35,
     textAlign: 'center',
     letterSpacing: 0.01,
-    color: '#212121'
+    color: '#212121',
+    marginBottom: 16,
+    marginTop: 32
   },
   textInput: {
     fontFamily: 'Roboto',
@@ -37,18 +39,21 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     fontSize: 16,
     lineHeight: 19,
-    color: '#BDBDBD'
+    width: 343,
+    height: 50,
+    marginTop: 16,
+    padding: 16,
+    backgroundColor: '#F6F6F6',
+    borderRadius: 8
   },
-  button: {
+  text: {
+    textAlign: 'center',
     fontFamily: 'Roboto',
     fontStyle: 'normal',
     fontWeight: '400',
     fontSize: 16,
     lineHeight: 19,
-    textAlign: 'center',
-    color: '#FFFFF',
-    backgroundColor: '#FF6C00',
-    borderRadius: 100
+    color: '#1B4371'
   }
 })
 
