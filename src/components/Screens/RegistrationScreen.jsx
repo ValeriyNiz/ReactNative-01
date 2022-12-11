@@ -1,26 +1,73 @@
 
-import { StyleSheet, TextInput, Text, View } from 'react-native';
-import Button from '../Button';
+import { useEffect, useState } from 'react';
+import { StyleSheet, TextInput, Text, View, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Image, Platform, TouchableOpacity } from 'react-native';
+// import Button from '../Button';
 
 const RegistrationScreen = () => {
-  return(
-  <View>
-    <Text style={styles.title}>Регистрация</Text>
-    <TextInput style={styles.textInput}
-      placeholder="Логин"
-    />
-    <TextInput style={styles.textInput}
-      placeholder="Адрес электронной почты"
-      />
-    <TextInput style={styles.textInput}
-      placeholder="Пароль"
-      />
-    <Button/>
-    <Text style={styles.text}>Уже есть аккаунт? Войти</Text>
-  </View>
- )}
+  const [isKeyboardShown, setIsKeyboardShown] = useState(false);
+
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
+      setIsKeyboardShown(true);
+    });
+    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+      setIsKeyboardShown(false);
+    });
+
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
+
+  return (
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.keyboard}
+      keyboardVerticalOffset={150}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.container}>
+          <View style={styles.fotoFrame}>
+            <TouchableOpacity activeOpacity={0.6}>
+              <Image style={styles.addBtn} source={require('../../Images/add.png')}></Image>
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.title}>Регистрация</Text>
+          <TextInput style={styles.textInput}
+              placeholder="Логин"/>
+          <TextInput style={styles.textInput}
+              placeholder="Адрес электронной почты"/>
+          <TextInput style={styles.textInput}
+              placeholder="Пароль"/>
+          {isKeyboardShown ? null : (
+              <>
+                <TouchableOpacity activeOpacity={0.6} style={styles.regBtn}>
+                  <Text style={styles.textRegBtn}>Зарегистрироваться</Text>
+                </TouchableOpacity>
+                <Text style={styles.text}>Уже есть аккаунт? Войти</Text>
+              </>
+            )
+          }
+        </View>
+      </TouchableWithoutFeedback>
+  </KeyboardAvoidingView>
+)}
 
 const styles = StyleSheet.create({
+  keyboard: {
+    flex: 1,
+    justifyContent: 'flex-end',
+  },
+  container: {
+    position: 'relative',
+    alignItems: 'center',
+    minWidth: '100%',
+    backgroundColor: '#fff',
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
+    paddingBottom: 30,
+  },
   title: {
     fontFamily: 'Roboto',
     fontStyle: 'normal',
@@ -30,8 +77,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     letterSpacing: 0.01,
     color: '#212121',
-    marginBottom: 16,
-    marginTop: 32
+    marginBottom: 10,
+    marginTop: 80
   },
   textInput: {
     fontFamily: 'Roboto',
@@ -54,6 +101,37 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 19,
     color: '#1B4371'
+  },
+  fotoFrame: {
+    position: 'absolute',
+    alignSelf: 'center',
+    top: -60,
+    width: 120,
+    height: 120,
+    borderRadius: 16,
+    backgroundColor: '#F6F6F6'
+  },
+  addBtn: {
+    top: 84,
+    left: 107,
+    width: 25,
+    height: 25
+  },
+  regBtn: {
+    marginTop: 43,
+    marginBottom: 16,
+    paddingVertical: 16,
+    backgroundColor: '#FF6C00',
+    borderRadius: 50,
+    width: 343,
+    height: 50
+  },
+  textRegBtn: {
+    fontWeight: 'normal',
+    fontSize: 16,
+    lineHeight: 19,
+    color: 'white',
+    textAlign: 'center'
   }
 })
 
