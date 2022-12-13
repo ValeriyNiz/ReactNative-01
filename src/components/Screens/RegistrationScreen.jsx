@@ -1,7 +1,6 @@
 
 import { useEffect, useState } from 'react';
 import { StyleSheet, TextInput, Text, View, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Image, Platform, TouchableOpacity } from 'react-native';
-// import Button from '../Button';
 
 const RegistrationScreen = () => {
   const [isKeyboardShown, setIsKeyboardShown] = useState(false);
@@ -39,13 +38,17 @@ const RegistrationScreen = () => {
           <TextInput style={styles.textInput}
               placeholder="Адрес электронной почты"/>
           <TextInput style={styles.textInput}
-              placeholder="Пароль"/>
+              placeholder="Пароль"
+              secureTextEntry={ true }/>
           {isKeyboardShown ? null : (
               <>
                 <TouchableOpacity activeOpacity={0.6} style={styles.regBtn}>
                   <Text style={styles.textRegBtn}>Зарегистрироваться</Text>
                 </TouchableOpacity>
-                <Text style={styles.text}>Уже есть аккаунт? Войти</Text>
+                <TouchableOpacity activeOpacity={0.6}>
+                  <Text style={styles.text}>Уже есть аккаунт? Войти</Text>
+                </TouchableOpacity>
+
               </>
             )
           }

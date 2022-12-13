@@ -1,15 +1,30 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, ImageBackground } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import LoginScreen from './src/components/Screens/LoginScreen';
 import RegistrationScreen from './src/components/Screens/RegistrationScreen';
+
+const Stack = createNativeStackNavigator();
 
 const App = () => {
   return (
     <View style={styles.container}>
       <ImageBackground
         source={require('./src/Images/PhotoBG.png')}
-        style={styles.imageBg}
-      >
+        style={styles.imageBg}>
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen
+              name="Registration"
+              component={RegistrationScreen}/>
+            <Stack.Screen
+              name="Login"
+              component={LoginScreen}/>
+          </Stack.Navigator>
+        </NavigationContainer>
         <RegistrationScreen />
+        <LoginScreen/>
         <StatusBar style="auto" />
       </ImageBackground>
     </View>
