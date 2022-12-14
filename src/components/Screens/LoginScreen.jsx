@@ -47,7 +47,7 @@ const LoginScreen = ({navigation}) => {
               <Button style={styles.text}
                 title='Нет аккаунта? Зарегистрироваться'
                 onPress={() =>
-                navigation.navigate ('Registration')}/>
+                navigation.navigate('Registration')}/>
                 {/* <Text style={styles.text}>Нет аккаунта? Зарегистрироваться</Text> */}
               </>
             )

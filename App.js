@@ -17,14 +17,14 @@ const App = () => {
           <Stack.Navigator>
             <Stack.Screen
               name="Registration"
-              component={RegistrationScreen}/>
+              component={RegistrationScreen}
+              options={{ headerShown: false }}/>
             <Stack.Screen
               name="Login"
-              component={LoginScreen}/>
+              component={LoginScreen}
+              options={{ headerShown: false }}/>
           </Stack.Navigator>
         </NavigationContainer>
-        <RegistrationScreen />
-        <LoginScreen/>
         <StatusBar style="auto" />
       </ImageBackground>
     </View>

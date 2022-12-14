@@ -1,8 +1,8 @@
 
 import { useEffect, useState } from 'react';
-import { StyleSheet, TextInput, Text, View, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Image, Platform, TouchableOpacity } from 'react-native';
+import { StyleSheet, TextInput, Text, View, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Image, Platform, TouchableOpacity, Button } from 'react-native';
 
-const RegistrationScreen = () => {
+const RegistrationScreen = ({navigation}) => {
   const [isKeyboardShown, setIsKeyboardShown] = useState(false);
 
   useEffect(() => {
@@ -45,10 +45,11 @@ const RegistrationScreen = () => {
                 <TouchableOpacity activeOpacity={0.6} style={styles.regBtn}>
                   <Text style={styles.textRegBtn}>Зарегистрироваться</Text>
                 </TouchableOpacity>
-                <TouchableOpacity activeOpacity={0.6}>
-                  <Text style={styles.text}>Уже есть аккаунт? Войти</Text>
-                </TouchableOpacity>
-
+              <Button style={styles.text}
+                title='Уже есть аккаунт? Войти'
+                onPress={() =>
+                navigation.navigate('Login')}
+              />
               </>
             )
           }
