@@ -1,9 +1,17 @@
 
 import { useEffect, useState } from 'react';
-import { StyleSheet, TextInput, Text, View, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Image, Platform, TouchableOpacity, Button } from 'react-native';
+import { StyleSheet, TextInput, Text, View, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Image, Platform, TouchableOpacity } from 'react-native';
 
-const LoginScreen = ({navigation}) => {
+const RegistrationScreen = ({navigation}) => {
   const [isKeyboardShown, setIsKeyboardShown] = useState(false);
+
+  const initialState = {
+    login: '',
+    email: '',
+    password: ''
+  }
+
+  const [state, setState] = useState(initialState)
 
   useEffect(() => {
     const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
@@ -23,32 +31,40 @@ const LoginScreen = ({navigation}) => {
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.keyboard}
-      keyboardVerticalOffset={150}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
           <View style={styles.fotoFrame}>
             <TouchableOpacity activeOpacity={0.6}>
-              <Image style={styles.delBtn} source={require('../../Images/delFoto.png')}></Image>
+              <Image style={styles.addBtn} source={require('../../../Images/add.png')}></Image>
             </TouchableOpacity>
           </View>
-          <Text style={styles.title}>Войти</Text>
+          <Text style={styles.title}>Регистрация</Text>
           <TextInput style={styles.textInput}
-              placeholder="Адрес электронной почты"/>
+            placeholder="Логин"
+            value={state.login}
+            onChangeText={(value) => setState((prevState) => ({...prevState, login: value}))}/>
+          <TextInput style={styles.textInput}
+            placeholder="Адрес электронной почты"
+            value={state.email}
+            onChangeText={(value) => setState((prevState) => ({...prevState, email: value}))}/>
           <TextInput style={styles.textInput}
             placeholder="Пароль"
-            secureTextEntry={ true } />
-
+            value={state.password}
+            onChangeText={(value) => setState((prevState) => ({...prevState, password: value}))}
+            secureTextEntry={true} />
+          <TouchableOpacity
+            onPress={() => console.log(state)}
+            activeOpacity={0.6}
+            style={styles.regBtn}>
+            <Text style={styles.textRegBtn}>Зарегистрироваться</Text>
+          </TouchableOpacity>
           {isKeyboardShown ? null : (
               <>
-                <TouchableOpacity activeOpacity={0.6} style={styles.signInBtn}>
-                  <Text style={styles.textSignInBtn}>Войти</Text>
-              </TouchableOpacity>
-              <Button style={styles.text}
-                title='Нет аккаунта? Зарегистрироваться'
+              <TouchableOpacity
                 onPress={() =>
-                navigation.navigate('Registration')}/>
-                {/* <Text style={styles.text}>Нет аккаунта? Зарегистрироваться</Text> */}
+                navigation.navigate('Login')}
+              ><Text style={styles.text}>Уже есть аккаунт? Войти</Text></TouchableOpacity>
               </>
             )
           }
@@ -60,7 +76,8 @@ const LoginScreen = ({navigation}) => {
 const styles = StyleSheet.create({
   keyboard: {
     flex: 1,
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-end'
+
   },
   container: {
     position: 'relative',
@@ -94,8 +111,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
     padding: 16,
     backgroundColor: '#F6F6F6',
-    borderRadius: 8,
-
+    borderRadius: 8
   },
   text: {
     textAlign: 'center',
@@ -106,6 +122,7 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     color: '#1B4371'
   },
+
   fotoFrame: {
     position: 'absolute',
     alignSelf: 'center',
@@ -115,13 +132,13 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     backgroundColor: '#F6F6F6'
   },
-  delBtn: {
-    top: 75,
-    left: 102,
-    width: 35,
-    height: 35
+  addBtn: {
+    top: 84,
+    left: 107,
+    width: 25,
+    height: 25
   },
-  signInBtn: {
+  regBtn: {
     marginTop: 43,
     marginBottom: 16,
     paddingVertical: 16,
@@ -130,7 +147,7 @@ const styles = StyleSheet.create({
     width: 343,
     height: 50
   },
-  textSignInBtn: {
+  textRegBtn: {
     fontWeight: 'normal',
     fontSize: 16,
     lineHeight: 19,
@@ -139,4 +156,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default LoginScreen;
+export default RegistrationScreen;
