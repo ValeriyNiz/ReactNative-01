@@ -11,7 +11,7 @@ const RegistrationScreen = ({navigation}) => {
     password: ''
   }
 
-  const [state, setState] = useState(initialState)
+  const [formData, setFormData] = useState(initialState)
 
   useEffect(() => {
     const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
@@ -26,6 +26,11 @@ const RegistrationScreen = ({navigation}) => {
       hideSubscription.remove();
     };
   }, []);
+
+  const onPressHandler = () => {
+      console.log(formData)
+      setFormData(initialState)
+    }
 
   return (
     <KeyboardAvoidingView
@@ -42,19 +47,19 @@ const RegistrationScreen = ({navigation}) => {
           <Text style={styles.title}>Регистрация</Text>
           <TextInput style={styles.textInput}
             placeholder="Логин"
-            value={state.login}
-            onChangeText={(value) => setState((prevState) => ({...prevState, login: value}))}/>
+            value={formData.login}
+            onChangeText={(value) => setFormData((prevState) => ({...prevState, login: value}))}/>
           <TextInput style={styles.textInput}
             placeholder="Адрес электронной почты"
-            value={state.email}
-            onChangeText={(value) => setState((prevState) => ({...prevState, email: value}))}/>
+            value={formData.email}
+            onChangeText={(value) => setFormData((prevState) => ({...prevState, email: value}))}/>
           <TextInput style={styles.textInput}
             placeholder="Пароль"
-            value={state.password}
-            onChangeText={(value) => setState((prevState) => ({...prevState, password: value}))}
+            value={formData.password}
+            onChangeText={(value) => setFormData((prevState) => ({...prevState, password: value}))}
             secureTextEntry={true} />
           <TouchableOpacity
-            onPress={() => console.log(state)}
+            onPress={() => onPressHandler()}
             activeOpacity={0.6}
             style={styles.regBtn}>
             <Text style={styles.textRegBtn}>Зарегистрироваться</Text>

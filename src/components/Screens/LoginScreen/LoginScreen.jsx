@@ -11,7 +11,7 @@ const LoginScreen = ({navigation}) => {
     password: ''
   }
 
-  const [state, setState] = useState(initialState)
+  const [formData, setFormData] = useState(initialState)
 
   useEffect(() => {
     const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
@@ -26,6 +26,11 @@ const LoginScreen = ({navigation}) => {
       hideSubscription.remove();
     };
   }, []);
+
+    const onPressHandler = () => {
+      console.log(formData)
+      setFormData(initialState)
+    }
 
   return (
     <KeyboardAvoidingView
@@ -43,15 +48,14 @@ const LoginScreen = ({navigation}) => {
           <Text style={styles.title}>Войти</Text>
           <TextInput style={styles.textInput}
             placeholder="Адрес электронной почты"
-            value={state.email}
-            onChangeText={(value) => setState((prevState) => ({...prevState, email: value}))}/>
+            value={formData.email}
+            onChangeText={(value) => setFormData((prevState) => ({...prevState, email: value}))}/>
           <TextInput style={styles.textInput}
             placeholder="Пароль"
-            value={state.password}
-            onChangeText={(value) => setState((prevState) => ({...prevState, password: value}))}
+            value={formData.password}
+            onChangeText={(value) => setFormData((prevState) => ({...prevState, password: value}))}
             secureTextEntry={true} />
-          <TouchableOpacity onPress={() =>  console.log(state)}
-            // setState(initialState)
+          <TouchableOpacity onPress={() => onPressHandler()}
             activeOpacity={0.6}
             style={styles.signInBtn}>
             <Text style={styles.textSignInBtn}>Войти</Text>
