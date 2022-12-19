@@ -30,6 +30,7 @@ const LoginScreen = ({navigation}) => {
     const onPressHandler = () => {
       console.log(formData)
       setFormData(initialState)
+      navigation.navigate('Posts')
     }
 
   return (

@@ -4,6 +4,7 @@ import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from './src/components/Screens/LoginScreen/LoginScreen';
 import RegistrationScreen from './src/components/Screens/RegistrationScreen/RegistrationScreen';
+import PostsScreen from './src/components/Screens/PostsScreen/PostsScreen';
 
 const Stack = createNativeStackNavigator();
 const MyTheme = {
@@ -29,7 +30,10 @@ const App = () => {
               name="Registration"
               component={RegistrationScreen}
               options={{ headerShown: false }}/>
-
+            <Stack.Screen
+              name="Posts"
+              component={PostsScreen}
+              options={{ headerShown: false }}/>
           </Stack.Navigator>
         </NavigationContainer>
         <StatusBar style="auto" />
