@@ -1,4 +1,5 @@
 import { Image, StyleSheet, Text, View } from "react-native";
+import { TouchableOpacity } from "react-native-web";
 
 
 
@@ -18,7 +19,9 @@ const PostsScreen = () => {
       <View style={styles.bottomLine}></View>
       <View style={styles.bottomNav}>
         <Image style={styles.myPostsIcon} source={require('../../../Images/myPosts.png')}></Image>
-        <Image style={styles.addNewPostIcon} source={require('../../../Images/addNewPost.png')}></Image>
+        {/* <TouchableOpacity activeOpacity={0.6}> */}
+         <Image style={styles.addNewPostIcon} source={require('../../../Images/addNewPost.png')}></Image>
+        {/* </TouchableOpacity> */}
         <Image style={styles.myProfileIcon} source={require('../../../Images/myProfile.png')}></Image>
       </View>
     </View>
@@ -81,7 +84,8 @@ const styles = StyleSheet.create({
     marginBottom: 20
   },
   bottomLine: {
-    borderBottomWidth: 1
+    borderBottomWidth: 1,
+    marginTop:540
   }
 })
 
