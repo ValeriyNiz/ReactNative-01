@@ -1,14 +1,20 @@
-import { Image, StyleSheet, Text, View } from "react-native";
-import { TouchableOpacity } from "react-native-web";
+import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 
 
 
-const PostsScreen = () => {
+const PostsScreen = ({navigation}) => {
+
+  const onPressHandler = () => {
+      navigation.navigate('CreatePostsScreen')
+    }
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Публикации</Text>
-        <Image style={styles.logOutIcon} source={require('../../../Images/logOut.png')}></Image>
+        <TouchableOpacity activeOpacity={0.6} onPress={() => navigation.navigate('Login')}>
+          <Image style={styles.logOutIcon} source={require('../../../Images/logOut.png')}></Image>
+        </TouchableOpacity>
       </View>
       <View>
         <View style={styles.myInfo}>
@@ -19,9 +25,9 @@ const PostsScreen = () => {
       <View style={styles.bottomLine}></View>
       <View style={styles.bottomNav}>
         <Image style={styles.myPostsIcon} source={require('../../../Images/myPosts.png')}></Image>
-        {/* <TouchableOpacity activeOpacity={0.6}> */}
+        <TouchableOpacity activeOpacity={0.6} onPress={() => onPressHandler()}>
          <Image style={styles.addNewPostIcon} source={require('../../../Images/addNewPost.png')}></Image>
-        {/* </TouchableOpacity> */}
+        </TouchableOpacity>
         <Image style={styles.myProfileIcon} source={require('../../../Images/myProfile.png')}></Image>
       </View>
     </View>
@@ -74,7 +80,7 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    marginTop: 30,
+    marginTop: 44,
     marginBottom: 10,
     paddingRight: 15,
     borderBottomWidth: 1
@@ -85,7 +91,7 @@ const styles = StyleSheet.create({
   },
   bottomLine: {
     borderBottomWidth: 1,
-    marginTop:540
+    marginTop:525
   }
 })
 

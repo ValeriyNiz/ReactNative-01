@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from './src/components/Screens/LoginScreen/LoginScreen';
 import RegistrationScreen from './src/components/Screens/RegistrationScreen/RegistrationScreen';
 import PostsScreen from './src/components/Screens/PostsScreen/PostsScreen';
+import CreatePostsScreen from './src/components/Screens/CreatePostsScreen/CreatePostsScreen';
 
 const Stack = createNativeStackNavigator();
 const MyTheme = {
@@ -33,6 +34,10 @@ const App = () => {
             <Stack.Screen
               name="Posts"
               component={PostsScreen}
+              options={{ headerShown: false }} />
+            <Stack.Screen
+              name="CreatePostsScreen"
+              component={CreatePostsScreen}
               options={{ headerShown: false }}/>
           </Stack.Navigator>
         </NavigationContainer>
