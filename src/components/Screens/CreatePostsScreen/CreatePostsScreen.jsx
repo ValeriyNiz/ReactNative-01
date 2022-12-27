@@ -47,7 +47,6 @@ const onPressHandler = () => {
 
 const styles = StyleSheet.create({
   container: {
-    // position: 'relative',
     backgroundColor: '#fff',
     height: '100%',
   },
@@ -68,7 +67,6 @@ const styles = StyleSheet.create({
     height: 24,
   },
   heroContainer: {
-    // flex: 1,
     paddingHorizontal: 15
   },
   fotoArea: {
@@ -86,13 +84,13 @@ const styles = StyleSheet.create({
     marginTop: 8
   },
   nameFotoInput: {
-    minHeight: 50,
+    height: 50,
     marginTop: 32,
     borderBottomWidth: 1
   },
   contLocationInput: {
-    flex: 1,
-    alignContent: 'flex-start'
+    flexDirection: 'row',
+    alignItems: 'baseline'
   },
   locationInput: {
     minHeight: 50,
