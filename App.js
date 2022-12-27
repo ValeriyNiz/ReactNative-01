@@ -11,8 +11,8 @@ const Stack = createNativeStackNavigator();
 const MyTheme = {
   colors: {
     ...DefaultTheme.colors,
-    background: 'transparent'
-  }
+    background: 'transparent',
+  },
 };
 
 const App = () => {
@@ -20,42 +20,47 @@ const App = () => {
     <View style={styles.container}>
       <ImageBackground
         source={require('./src/Images/PhotoBG.png')}
-        style={styles.imageBg}>
+        style={styles.imageBg}
+      >
         <NavigationContainer theme={MyTheme}>
-          <Stack.Navigator >
+          <Stack.Navigator>
             <Stack.Screen
               name="Login"
               component={LoginScreen}
-              options={{ headerShown: false }}/>
+              options={{ headerShown: false }}
+            />
             <Stack.Screen
               name="Registration"
               component={RegistrationScreen}
-              options={{ headerShown: false }}/>
+              options={{ headerShown: false }}
+            />
             <Stack.Screen
               name="Posts"
               component={PostsScreen}
-              options={{ headerShown: false }} />
+              options={{ headerShown: false }}
+            />
             <Stack.Screen
               name="CreatePostsScreen"
               component={CreatePostsScreen}
-              options={{ headerShown: false }}/>
+              options={{ headerShown: false }}
+            />
           </Stack.Navigator>
         </NavigationContainer>
         <StatusBar style="auto" />
       </ImageBackground>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   imageBg: {
     flex: 1,
     resizeMode: 'cover',
     justifyContent: 'flex-end',
-  }
+  },
 });
 
 export default App;

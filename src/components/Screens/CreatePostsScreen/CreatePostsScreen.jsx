@@ -1,49 +1,56 @@
-import { Image, StyleSheet, Text, View, TouchableOpacity, TextInput } from "react-native";
+import {
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  TextInput,
+} from 'react-native';
 
-const CreatePostsScreen = ({navigation}) => {
-
-const onPressHandler = () => {
-      navigation.navigate('Posts')
-    }
+const CreatePostsScreen = ({ navigation }) => {
+  const onPressHandler = () => {
+    navigation.navigate('Posts');
+  };
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity activeOpacity={0.6} onPress={() => onPressHandler()}>
-          <Image style={styles.arrowBack} source={require('../../../Images/arrowLeft.png')}></Image>
+          <Image
+            style={styles.arrowBack}
+            source={require('../../../Images/arrowLeft.png')}
+          ></Image>
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Создать публикацию</Text>
       </View>
       <View style={styles.heroContainer}>
         <View style={styles.fotoArea}>
-            <Image style={styles.addFotoIcon} source={require('../../../Images/addFoto.png')}></Image>
+          <Image
+            style={styles.addFotoIcon}
+            source={require('../../../Images/addFoto.png')}
+          ></Image>
         </View>
         <Text style={styles.loadFotoText}>Загрузите фото</Text>
         <View style={styles.contInputs}>
           <TextInput
             style={styles.nameFotoInput}
-            placeholder={'Название'}>
-          </TextInput>
+            placeholder={'Название'}
+          ></TextInput>
         </View>
         <View style={styles.contLocationInput}>
           <View style={styles.locationIcon}>
-            <Image  source={require('../../../Images/locationIcon.png')}>
-            </Image>
+            <Image source={require('../../../Images/locationIcon.png')}></Image>
           </View>
           <View style={styles.locationInput}>
-            <TextInput
-            placeholder={'Местность'}>
-            </TextInput>
+            <TextInput placeholder={'Местность'}></TextInput>
           </View>
-
         </View>
         <View></View>
         <View></View>
       </View>
     </View>
-
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -56,18 +63,18 @@ const styles = StyleSheet.create({
     marginTop: 44,
     marginBottom: 10,
     paddingLeft: 15,
-    borderBottomWidth: 1
+    borderBottomWidth: 1,
   },
   headerTitle: {
     marginLeft: 90,
-    marginBottom: 20
+    marginBottom: 20,
   },
   arrowBack: {
     width: 24,
     height: 24,
   },
   heroContainer: {
-    paddingHorizontal: 15
+    paddingHorizontal: 15,
   },
   fotoArea: {
     justifyContent: 'center',
@@ -78,19 +85,19 @@ const styles = StyleSheet.create({
   addFotoIcon: {
     width: 60,
     height: 60,
-    alignSelf: 'center'
+    alignSelf: 'center',
   },
   loadFotoText: {
-    marginTop: 8
+    marginTop: 8,
   },
   nameFotoInput: {
     height: 50,
     marginTop: 32,
-    borderBottomWidth: 1
+    borderBottomWidth: 1,
   },
   contLocationInput: {
     flexDirection: 'row',
-    alignItems: 'baseline'
+    alignItems: 'baseline',
   },
   locationInput: {
     minHeight: 50,
@@ -100,7 +107,6 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
   },
-
-})
+});
 
 export default CreatePostsScreen;
