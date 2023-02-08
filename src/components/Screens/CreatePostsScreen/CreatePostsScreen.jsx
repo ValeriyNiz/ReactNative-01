@@ -1,3 +1,4 @@
+import MapView from 'react-native-maps';
 import {
   Image,
   StyleSheet,
@@ -45,7 +46,15 @@ const CreatePostsScreen = ({ navigation }) => {
             <TextInput placeholder={'Местность'}></TextInput>
           </View>
         </View>
-        <View></View>
+        <View>
+          <TouchableOpacity
+            onPress={() => onPressHandler()}
+            activeOpacity={0.6}
+            style={styles.publishBtn}
+          >
+            <Text style={styles.textPublishBtn}>Опубликовать</Text>
+          </TouchableOpacity>
+        </View>
         <View></View>
       </View>
     </View>
@@ -106,6 +115,22 @@ const styles = StyleSheet.create({
   locationIcon: {
     width: 24,
     height: 24,
+  },
+  publishBtn: {
+    marginTop: 93,
+    marginBottom: 16,
+    paddingVertical: 16,
+    backgroundColor: '#FF6C00',
+    borderRadius: 50,
+    width: '100%',
+    height: 50,
+  },
+  textPublishBtn: {
+    fontWeight: 'normal',
+    fontSize: 16,
+    lineHeight: 19,
+    color: 'white',
+    textAlign: 'center',
   },
 });
 
