@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import MapView from 'react-native-maps';
+import { Camera } from 'expo-camera';
 import {
   Image,
   StyleSheet,
@@ -9,8 +11,16 @@ import {
 } from 'react-native';
 
 const CreatePostsScreen = ({ navigation }) => {
-  const onPressHandler = () => {
-    navigation.navigate('Posts');
+  const [snap, setSnap] = useState(null);
+  const [foto, setFoto] = useState(null);
+
+  const takeFoto = async () => {
+    const foto = await snap.takePictureAsync();
+    setFoto(foto.uri);
+  };
+
+  const sendFoto = () => {
+    navigation.navigate('Posts', { foto });
   };
 
   return (
@@ -25,11 +35,24 @@ const CreatePostsScreen = ({ navigation }) => {
         <Text style={styles.headerTitle}>Создать публикацию</Text>
       </View>
       <View style={styles.heroContainer}>
-        <View style={styles.fotoArea}>
-          <Image
-            style={styles.addFotoIcon}
-            source={require('../../../Images/addFoto.png')}
-          ></Image>
+        <View style={styles.cameraCont}>
+          <Camera style={styles.camera} ref={setSnap}>
+            {foto && (
+              <View style={styles.takeFotoCont}>
+                <Image
+                  source={{ uri: foto }}
+                  style={{ height: 160, width: 200 }}
+                />
+              </View>
+            )}
+            <TouchableOpacity
+              style={styles.snapCont}
+              activeOpacity={0.6}
+              onPress={takeFoto}
+            >
+              <Text style={styles.snap}>SNAP</Text>
+            </TouchableOpacity>
+          </Camera>
         </View>
         <Text style={styles.loadFotoText}>Загрузите фото</Text>
         <View style={styles.contInputs}>
@@ -48,7 +71,7 @@ const CreatePostsScreen = ({ navigation }) => {
         </View>
         <View>
           <TouchableOpacity
-            onPress={() => onPressHandler()}
+            onPress={sendFoto}
             activeOpacity={0.6}
             style={styles.publishBtn}
           >
@@ -85,16 +108,33 @@ const styles = StyleSheet.create({
   heroContainer: {
     paddingHorizontal: 15,
   },
-  fotoArea: {
+  cameraCont: {
     justifyContent: 'center',
-    minHeight: 240,
-    backgroundColor: '#F6F6F6',
-    borderRadius: 8,
+    height: '50%',
   },
-  addFotoIcon: {
-    width: 60,
-    height: 60,
-    alignSelf: 'center',
+  camera: {
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    height: '100%',
+  },
+  snap: {
+    color: '#fff',
+  },
+  snapCont: {
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#ff0000',
+    borderRadius: 10,
+    width: 50,
+    marginBottom: 15,
+  },
+  takeFotoCont: {
+    position: 'absolute',
+    top: 30,
+    left: 10,
+    borderWidth: 1,
+    borderColor: '#fff',
+    paddingBottom: 10,
   },
   loadFotoText: {
     marginTop: 8,
@@ -117,7 +157,7 @@ const styles = StyleSheet.create({
     height: 24,
   },
   publishBtn: {
-    marginTop: 93,
+    marginTop: 63,
     marginBottom: 16,
     paddingVertical: 16,
     backgroundColor: '#FF6C00',

@@ -1,10 +1,26 @@
-import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  FlatList,
+} from 'react-native';
+import { useState, useEffect } from 'react';
 
-const PostsScreen = ({ navigation }) => {
+const PostsScreen = ({ navigation, route }) => {
   const onPressHandler = () => {
     navigation.navigate('CreatePostsScreen');
   };
 
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    if (route.params) {
+      setPosts(prevState => [...prevState, route.params]);
+    }
+  }, [route.params]);
+  console.log('posts', posts);
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -20,15 +36,27 @@ const PostsScreen = ({ navigation }) => {
         </TouchableOpacity>
       </View>
       <View>
-        <View style={styles.myInfo}>
-          <Image
+        <View style={styles.postsCont}>
+          <FlatList
+            data={posts}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item }) => (
+              <View style={styles.postsFoto}>
+                <Image
+                  source={{ uri: item.foto }}
+                  style={{ width: '100%', height: 200 }}
+                />
+              </View>
+            )}
+          />
+          {/* <Image
             style={styles.userFoto}
             source={require('../../../Images/userFoto.png')}
           ></Image>
-          <Text>Natali Romanova {'\n'}email@example.com</Text>
+          <Text>Natali Romanova {'\n'}email@example.com</Text> */}
         </View>
       </View>
-      <View style={styles.bottomLine}></View>
+      {/* <View style={styles.bottomLine}></View> */}
       <View style={styles.bottomNav}>
         <Image
           style={styles.myPostsIcon}
@@ -85,11 +113,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     marginBottom: 20,
   },
-  myInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 32,
-    paddingLeft: 15,
+  postsCont: {
+    marginTop: 10,
+    paddingLeft: 10,
+    paddingRight: 10,
+  },
+  postsFoto: {
+    marginBottom: 10,
   },
   header: {
     flexDirection: 'row',
