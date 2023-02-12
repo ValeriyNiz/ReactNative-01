@@ -5,14 +5,11 @@ import {
   View,
   TouchableOpacity,
   FlatList,
+  Button,
 } from 'react-native';
 import { useState, useEffect } from 'react';
 
-const PostsScreen = ({ navigation, route }) => {
-  const onPressHandler = () => {
-    navigation.navigate('CreatePostsScreen');
-  };
-
+const DefaultPostsScreen = ({ navigation, route }) => {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
@@ -49,29 +46,14 @@ const PostsScreen = ({ navigation, route }) => {
               </View>
             )}
           />
-          {/* <Image
-            style={styles.userFoto}
-            source={require('../../../Images/userFoto.png')}
-          ></Image>
-          <Text>Natali Romanova {'\n'}email@example.com</Text> */}
         </View>
       </View>
-      {/* <View style={styles.bottomLine}></View> */}
-      <View style={styles.bottomNav}>
-        <Image
-          style={styles.myPostsIcon}
-          source={require('../../../Images/myPosts.png')}
-        ></Image>
-        <TouchableOpacity activeOpacity={0.6} onPress={() => onPressHandler()}>
-          <Image
-            style={styles.addNewPostIcon}
-            source={require('../../../Images/addNewPost.png')}
-          ></Image>
-        </TouchableOpacity>
-        <Image
-          style={styles.myProfileIcon}
-          source={require('../../../Images/myProfile.png')}
-        ></Image>
+      <View style={styles.btnCont}>
+        <Button title="Map" onPress={() => navigation.navigate('Map')} />
+        <Button
+          title="Comments"
+          onPress={() => navigation.navigate('Comments')}
+        />
       </View>
     </View>
   );
@@ -102,7 +84,6 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   container: {
-    position: 'relative',
     backgroundColor: '#fff',
     height: '100%',
   },
@@ -133,10 +114,10 @@ const styles = StyleSheet.create({
     marginRight: 120,
     marginBottom: 20,
   },
-  bottomLine: {
-    borderBottomWidth: 1,
-    marginTop: 525,
+  btnCont: {
+    flex: 1,
+    justifyContent: 'flex-end',
   },
 });
 
-export default PostsScreen;
+export default DefaultPostsScreen;

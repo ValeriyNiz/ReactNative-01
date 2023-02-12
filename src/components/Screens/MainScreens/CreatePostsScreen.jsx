@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import MapView from 'react-native-maps';
 import { Camera } from 'expo-camera';
+import * as Location from 'expo-location';
 import {
   Image,
   StyleSheet,
@@ -15,18 +16,29 @@ const CreatePostsScreen = ({ navigation }) => {
   const [foto, setFoto] = useState(null);
 
   const takeFoto = async () => {
+    const cameraStatus = await Camera.requestCameraPermissionsAsync();
+    console.log(cameraStatus);
     const foto = await snap.takePictureAsync();
+    const { status } = await Location.requestForegroundPermissionsAsync();
+    console.log(status);
+    const location = await Location.getCurrentPositionAsync({});
+
+    console.log('location', location);
     setFoto(foto.uri);
+    console.log('foto', foto);
   };
 
   const sendFoto = () => {
-    navigation.navigate('Posts', { foto });
+    navigation.navigate('DefaultScreen', { foto });
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity activeOpacity={0.6} onPress={() => onPressHandler()}>
+        <TouchableOpacity
+          activeOpacity={0.6}
+          onPress={() => navigation.navigate('Posts')}
+        >
           <Image
             style={styles.arrowBack}
             source={require('../../../Images/arrowLeft.png')}

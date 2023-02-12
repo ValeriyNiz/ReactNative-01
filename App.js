@@ -1,13 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, ImageBackground } from 'react-native';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import LoginScreen from './src/components/Screens/LoginScreen/LoginScreen';
-import RegistrationScreen from './src/components/Screens/RegistrationScreen/RegistrationScreen';
-import PostsScreen from './src/components/Screens/PostsScreen/PostsScreen';
-import CreatePostsScreen from './src/components/Screens/CreatePostsScreen/CreatePostsScreen';
+import { useRoute } from './router';
 
-const Stack = createNativeStackNavigator();
 const MyTheme = {
   colors: {
     ...DefaultTheme.colors,
@@ -16,36 +11,14 @@ const MyTheme = {
 };
 
 const App = () => {
+  const routing = useRoute(null);
   return (
     <View style={styles.container}>
       <ImageBackground
         source={require('./src/Images/PhotoBG.png')}
         style={styles.imageBg}
       >
-        <NavigationContainer theme={MyTheme}>
-          <Stack.Navigator>
-            <Stack.Screen
-              name="Login"
-              component={LoginScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Registration"
-              component={RegistrationScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Posts"
-              component={PostsScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="CreatePostsScreen"
-              component={CreatePostsScreen}
-              options={{ headerShown: false }}
-            />
-          </Stack.Navigator>
-        </NavigationContainer>
+        <NavigationContainer theme={MyTheme}>{routing}</NavigationContainer>
         <StatusBar style="auto" />
       </ImageBackground>
     </View>
@@ -64,3 +37,21 @@ const styles = StyleSheet.create({
 });
 
 export default App;
+
+{
+  /* <AuthStack.Screen
+        name="Posts"
+        component={PostsScreen}
+        options={{ headerShown: false }}
+      />
+      <AuthStack.Screen
+        name="CreatePostsScreen"
+        component={CreatePostsScreen}
+        options={{ headerShown: false }}
+      />
+      <AuthStack.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{ headerShown: false }}
+      /> */
+}
