@@ -1,14 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
-import LoginScreen from './screens/AuthScreens/LoginScreen';
-import RegistrationScreen from './screens/AuthScreens/RegistrationScreen';
-import PostsScreen from './screens/MainScreens/PostsScreen';
-import CreatePostsScreen from './screens/MainScreens/CreatePostsScreen';
-import ProfileScreen from './screens/MainScreens/ProfileScreen';
-import CommentsScreen from './screens/NestedScreens/CommentsScreen';
-import MapScreen from './screens/NestedScreens/MapScreen';
-
 import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
@@ -16,20 +7,18 @@ import { FontAwesome } from '@expo/vector-icons';
 const AuthStack = createNativeStackNavigator();
 const MainTab = createBottomTabNavigator();
 
+import RegistrationScreen from './screens/AuthScreens/RegistrationScreen';
+import LoginScreen from './screens/AuthScreens/LoginScreen';
+import PostsScreen from './screens/MainScreens/PostsScreen';
+import CreatePostsScreen from './screens/MainScreens/CreatePostsScreen';
+import ProfileScreen from './screens/MainScreens/ProfileScreen';
+
 export const useRoute = isAuth => {
   if (!isAuth) {
     return (
-      <AuthStack.Navigator>
-        <AuthStack.Screen
-          name="Login"
-          component={LoginScreen}
-          options={{ headerShown: false }}
-        />
-        <AuthStack.Screen
-          name="Registration"
-          component={RegistrationScreen}
-          options={{ headerShown: false }}
-        />
+      <AuthStack.Navigator screenOptions={{ headerShown: false }}>
+        <AuthStack.Screen name="Login" component={LoginScreen} />
+        <AuthStack.Screen name="Registration" component={RegistrationScreen} />
       </AuthStack.Navigator>
     );
   }

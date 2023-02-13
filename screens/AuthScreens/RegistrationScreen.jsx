@@ -42,9 +42,9 @@ const RegistrationScreen = ({ navigation }) => {
   }, []);
 
   const onPressHandler = () => {
-    console.log(formData);
     dispatch(authSignUpUser(formData));
     setFormData(initialState);
+    Keyboard.dismiss();
   };
 
   return (

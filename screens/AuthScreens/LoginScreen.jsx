@@ -12,15 +12,27 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+import { useDispatch } from 'react-redux';
+import { authSignInUser } from '../../redux/auth/authOperations';
+
+const initialState = {
+  email: null,
+  password: null,
+};
+
 const LoginScreen = ({ navigation }) => {
   const [isKeyboardShown, setIsKeyboardShown] = useState(false);
 
-  const initialState = {
-    email: '',
-    password: '',
-  };
-
   const [formData, setFormData] = useState(initialState);
+
+  const dispatch = useDispatch();
+
+  const onLogin = () => {
+    dispatch(authSignInUser(formData));
+    setFormData(initialState);
+    Keyboard.dismiss();
+    navigation.navigate('Posts');
+  };
 
   useEffect(() => {
     const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
@@ -36,17 +48,10 @@ const LoginScreen = ({ navigation }) => {
     };
   }, []);
 
-  // const onPressHandler = () => {
-  //   console.log(formData);
-  //   setFormData(initialState);
-  //   navigation.navigate('DefaultPosts');
-  // };
-
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.keyboard}
-      // keyboardVerticalOffset={-30}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
@@ -77,7 +82,7 @@ const LoginScreen = ({ navigation }) => {
             secureTextEntry={true}
           />
           <TouchableOpacity
-            onPress={() => navigation.navigate('DefaultPosts')}
+            onPress={() => onLogin()}
             activeOpacity={0.6}
             style={styles.signInBtn}
           >
