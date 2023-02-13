@@ -11,16 +11,21 @@ import {
   Platform,
   TouchableOpacity,
 } from 'react-native';
+import { useDispatch } from 'react-redux';
 
-const LoginScreen = ({ navigation }) => {
+import { authSignUpUser } from '../../redux/auth/authOperations';
+
+const initialState = {
+  login: '',
+  email: '',
+  password: '',
+};
+
+const RegistrationScreen = ({ navigation }) => {
   const [isKeyboardShown, setIsKeyboardShown] = useState(false);
-
-  const initialState = {
-    email: '',
-    password: '',
-  };
-
   const [formData, setFormData] = useState(initialState);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
@@ -36,29 +41,36 @@ const LoginScreen = ({ navigation }) => {
     };
   }, []);
 
-  // const onPressHandler = () => {
-  //   console.log(formData);
-  //   setFormData(initialState);
-  //   navigation.navigate('DefaultPosts');
-  // };
+  const onPressHandler = () => {
+    console.log(formData);
+    dispatch(authSignUpUser(formData));
+    setFormData(initialState);
+  };
 
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.keyboard}
-      // keyboardVerticalOffset={-30}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
           <View style={styles.fotoFrame}>
             <TouchableOpacity activeOpacity={0.6}>
               <Image
-                style={styles.delBtn}
-                source={require('../../../Images/delFoto.png')}
+                style={styles.addBtn}
+                source={require('../../components/Images/add.png')}
               ></Image>
             </TouchableOpacity>
           </View>
-          <Text style={styles.title}>Войти</Text>
+          <Text style={styles.title}>Регистрация</Text>
+          <TextInput
+            style={styles.textInput}
+            placeholder="Логин"
+            value={formData.login}
+            onChangeText={value =>
+              setFormData(prevState => ({ ...prevState, login: value }))
+            }
+          />
           <TextInput
             style={styles.textInput}
             placeholder="Адрес электронной почты"
@@ -77,21 +89,16 @@ const LoginScreen = ({ navigation }) => {
             secureTextEntry={true}
           />
           <TouchableOpacity
-            onPress={() => navigation.navigate('DefaultPosts')}
+            onPress={() => onPressHandler()}
             activeOpacity={0.6}
-            style={styles.signInBtn}
+            style={styles.regBtn}
           >
-            <Text style={styles.textSignInBtn}>Войти</Text>
+            <Text style={styles.textRegBtn}>Зарегистрироваться</Text>
           </TouchableOpacity>
-
           {isKeyboardShown ? null : (
             <>
-              <TouchableOpacity
-                onPress={() => navigation.navigate('Registration')}
-              >
-                <Text style={styles.text}>
-                  Нет аккаунта? Зарегистрироваться
-                </Text>
+              <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+                <Text style={styles.text}>Уже есть аккаунт? Войти</Text>
               </TouchableOpacity>
             </>
           )}
@@ -149,6 +156,7 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     color: '#1B4371',
   },
+
   fotoFrame: {
     position: 'absolute',
     alignSelf: 'center',
@@ -158,13 +166,13 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     backgroundColor: '#F6F6F6',
   },
-  delBtn: {
-    top: 75,
-    left: 102,
-    width: 35,
-    height: 35,
+  addBtn: {
+    top: 84,
+    left: 107,
+    width: 25,
+    height: 25,
   },
-  signInBtn: {
+  regBtn: {
     marginTop: 43,
     marginBottom: 16,
     paddingVertical: 16,
@@ -173,7 +181,7 @@ const styles = StyleSheet.create({
     width: 343,
     height: 50,
   },
-  textSignInBtn: {
+  textRegBtn: {
     fontWeight: 'normal',
     fontSize: 16,
     lineHeight: 19,
@@ -182,4 +190,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default RegistrationScreen;

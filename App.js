@@ -2,6 +2,8 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, ImageBackground } from 'react-native';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { useRoute } from './router';
+import { Provider } from 'react-redux';
+import { store } from './redux/store';
 
 const MyTheme = {
   colors: {
@@ -11,14 +13,17 @@ const MyTheme = {
 };
 
 const App = () => {
-  const routing = useRoute(null);
+  const routing = useRoute(false);
   return (
     <View style={styles.container}>
       <ImageBackground
-        source={require('./src/Images/PhotoBG.png')}
+        source={require('./components/Images/PhotoBG.png')}
         style={styles.imageBg}
       >
-        <NavigationContainer theme={MyTheme}>{routing}</NavigationContainer>
+        <Provider store={store}>
+          <NavigationContainer theme={MyTheme}>{routing}</NavigationContainer>
+        </Provider>
+
         <StatusBar style="auto" />
       </ImageBackground>
     </View>

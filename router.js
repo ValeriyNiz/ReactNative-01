@@ -1,13 +1,13 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import LoginScreen from './src/components/Screens/AuthScreens/LoginScreen';
-import RegistrationScreen from './src/components/Screens/AuthScreens/RegistrationScreen';
-import PostsScreen from './src/components/Screens/MainScreens/PostsScreen';
-import CreatePostsScreen from './src/components/Screens/MainScreens/CreatePostsScreen';
-import ProfileScreen from './src/components/Screens/MainScreens/ProfileScreen';
-import CommentsScreen from './src/components/Screens/NestedScreens/CommentsScreen';
-import MapScreen from './src/components/Screens/NestedScreens/MapScreen';
+import LoginScreen from './screens/AuthScreens/LoginScreen';
+import RegistrationScreen from './screens/AuthScreens/RegistrationScreen';
+import PostsScreen from './screens/MainScreens/PostsScreen';
+import CreatePostsScreen from './screens/MainScreens/CreatePostsScreen';
+import ProfileScreen from './screens/MainScreens/ProfileScreen';
+import CommentsScreen from './screens/NestedScreens/CommentsScreen';
+import MapScreen from './screens/NestedScreens/MapScreen';
 
 import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';

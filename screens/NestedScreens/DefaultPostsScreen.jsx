@@ -5,14 +5,11 @@ import {
   View,
   TouchableOpacity,
   FlatList,
+  Button,
 } from 'react-native';
 import { useState, useEffect } from 'react';
 
-const ProfileScreen = ({ navigation, route }) => {
-  // const onPressHandler = () => {
-  //   navigation.navigate('CreatePostsScreen');
-  // };
-
+const DefaultPostsScreen = ({ navigation, route }) => {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
@@ -24,14 +21,14 @@ const ProfileScreen = ({ navigation, route }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Профиль</Text>
+        <Text style={styles.headerTitle}>Публикации</Text>
         <TouchableOpacity
           activeOpacity={0.6}
           onPress={() => navigation.navigate('Login')}
         >
           <Image
             style={styles.logOutIcon}
-            source={require('../../../Images/logOut.png')}
+            source={require('../../components/Images/logOut.png')}
           ></Image>
         </TouchableOpacity>
       </View>
@@ -51,28 +48,13 @@ const ProfileScreen = ({ navigation, route }) => {
           />
         </View>
       </View>
-      {/* <View style={styles.bottomNav}>
-        <TouchableOpacity
-          activeOpacity={0.6}
-          onPress={() => navigation.navigate('Posts')}
-        >
-          <Image
-            style={styles.myPostsIcon}
-            source={require('../../../Images/myPosts.png')}
-          ></Image>
-        </TouchableOpacity>
-
-        <TouchableOpacity activeOpacity={0.6} onPress={() => onPressHandler()}>
-          <Image
-            style={styles.addNewPostIcon}
-            source={require('../../../Images/addNewPost.png')}
-          ></Image>
-        </TouchableOpacity>
-        <Image
-          style={styles.myProfileIcon}
-          source={require('../../../Images/myProfile.png')}
-        ></Image>
-      </View> */}
+      <View style={styles.btnCont}>
+        <Button title="Map" onPress={() => navigation.navigate('Map')} />
+        <Button
+          title="Comments"
+          onPress={() => navigation.navigate('Comments')}
+        />
+      </View>
     </View>
   );
 };
@@ -102,7 +84,6 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   container: {
-    position: 'relative',
     backgroundColor: '#fff',
     height: '100%',
   },
@@ -133,10 +114,10 @@ const styles = StyleSheet.create({
     marginRight: 120,
     marginBottom: 20,
   },
-  bottomLine: {
-    borderBottomWidth: 1,
-    marginTop: 525,
+  btnCont: {
+    flex: 1,
+    justifyContent: 'flex-end',
   },
 });
 
-export default ProfileScreen;
+export default DefaultPostsScreen;

@@ -41,7 +41,7 @@ const CreatePostsScreen = ({ navigation }) => {
         >
           <Image
             style={styles.arrowBack}
-            source={require('../../../Images/arrowLeft.png')}
+            source={require('../../components/Images/arrowLeft.png')}
           ></Image>
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Создать публикацию</Text>
@@ -75,7 +75,9 @@ const CreatePostsScreen = ({ navigation }) => {
         </View>
         <View style={styles.contLocationInput}>
           <View style={styles.locationIcon}>
-            <Image source={require('../../../Images/locationIcon.png')}></Image>
+            <Image
+              source={require('../../components/Images/locationIcon.png')}
+            ></Image>
           </View>
           <View style={styles.locationInput}>
             <TextInput placeholder={'Местность'}></TextInput>
