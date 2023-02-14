@@ -8,23 +8,26 @@ import {
   Button,
 } from 'react-native';
 import { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { authSignOutUser } from '../../redux/auth/authOperations';
 
 const DefaultPostsScreen = ({ navigation, route }) => {
   const [posts, setPosts] = useState([]);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (route.params) {
       setPosts(prevState => [...prevState, route.params]);
     }
   }, [route.params]);
-  console.log('posts', posts);
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Публикации</Text>
         <TouchableOpacity
           activeOpacity={0.6}
-          onPress={() => navigation.navigate('Login')}
+          onPress={() => authSignOutUser(dispatch)}
         >
           <Image
             style={styles.logOutIcon}

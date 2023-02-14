@@ -1,5 +1,4 @@
 import React from 'react';
-import { moduleName } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import DefaultPostsScreen from '../NestedScreens/DefaultPostsScreen';
 import CommentsScreen from '../NestedScreens/CommentsScreen';
@@ -7,9 +6,31 @@ import MapScreen from '../NestedScreens/MapScreen';
 
 const NestedScreen = createNativeStackNavigator();
 
-const PostsScreen = () => {
+const PostsScreen = ({ navigation }) => {
   return (
-    <NestedScreen.Navigator>
+    <NestedScreen.Navigator
+      screenListeners={{
+        state: e => {
+          e.data.state.routes.length === 2
+            ? navigation.setOptions({
+                tabBarStyle: {
+                  height: 0,
+                },
+              })
+            : navigation.setOptions({
+                tabBarStyle: {
+                  paddingHorizontal: '15%',
+                  paddingVertical: 9,
+                  height: 58,
+                },
+              });
+        },
+      }}
+      screenOptions={{
+        headerShown: false,
+        cardStyle: { backgroundColor: '#fff' },
+      }}
+    >
       <NestedScreen.Screen
         name="DefaultScreen"
         component={DefaultPostsScreen}

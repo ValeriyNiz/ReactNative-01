@@ -7,11 +7,11 @@ import {
   FlatList,
 } from 'react-native';
 import { useState, useEffect } from 'react';
+import { authSignOutUser } from '../../redux/auth/authOperations';
+import { useDispatch } from 'react-redux';
 
 const ProfileScreen = ({ navigation, route }) => {
-  // const onPressHandler = () => {
-  //   navigation.navigate('CreatePostsScreen');
-  // };
+  const dispatch = useDispatch();
 
   const [posts, setPosts] = useState([]);
 
@@ -27,7 +27,7 @@ const ProfileScreen = ({ navigation, route }) => {
         <Text style={styles.headerTitle}>Профиль</Text>
         <TouchableOpacity
           activeOpacity={0.6}
-          onPress={() => navigation.navigate('Login')}
+          onPress={() => authSignOutUser(dispatch)}
         >
           <Image
             style={styles.logOutIcon}
@@ -51,28 +51,6 @@ const ProfileScreen = ({ navigation, route }) => {
           />
         </View>
       </View>
-      {/* <View style={styles.bottomNav}>
-        <TouchableOpacity
-          activeOpacity={0.6}
-          onPress={() => navigation.navigate('Posts')}
-        >
-          <Image
-            style={styles.myPostsIcon}
-            source={require('../../../Images/myPosts.png')}
-          ></Image>
-        </TouchableOpacity>
-
-        <TouchableOpacity activeOpacity={0.6} onPress={() => onPressHandler()}>
-          <Image
-            style={styles.addNewPostIcon}
-            source={require('../../../Images/addNewPost.png')}
-          ></Image>
-        </TouchableOpacity>
-        <Image
-          style={styles.myProfileIcon}
-          source={require('../../../Images/myProfile.png')}
-        ></Image>
-      </View> */}
     </View>
   );
 };

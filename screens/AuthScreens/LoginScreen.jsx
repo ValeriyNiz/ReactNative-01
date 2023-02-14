@@ -12,7 +12,6 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import { useDispatch } from 'react-redux';
 import { authSignInUser } from '../../redux/auth/authOperations';
 
 const initialState = {
@@ -25,13 +24,10 @@ const LoginScreen = ({ navigation }) => {
 
   const [formData, setFormData] = useState(initialState);
 
-  const dispatch = useDispatch();
-
   const onLogin = () => {
-    dispatch(authSignInUser(formData));
+    authSignInUser(formData);
     setFormData(initialState);
     Keyboard.dismiss();
-    navigation.navigate('Posts');
   };
 
   useEffect(() => {
