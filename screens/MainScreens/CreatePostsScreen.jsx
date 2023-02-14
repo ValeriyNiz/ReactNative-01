@@ -1,191 +1,356 @@
-import { useState } from 'react';
-import MapView from 'react-native-maps';
-import { Camera } from 'expo-camera';
-import * as Location from 'expo-location';
+import React, { useEffect, useState } from 'react';
 import {
-  Image,
-  StyleSheet,
-  Text,
   View,
+  Text,
+  Alert,
+  Linking,
   TouchableOpacity,
+  Image,
+  TouchableWithoutFeedback,
   TextInput,
+  KeyboardAvoidingView,
+  Keyboard,
+  StyleSheet,
 } from 'react-native';
+import { useSelector } from 'react-redux';
+import { collection, addDoc } from 'firebase/firestore';
+import { Camera } from 'expo-camera';
+import { Feather } from '@expo/vector-icons';
+import Svg, { Path } from 'react-native-svg';
 
-const CreatePostsScreen = ({ navigation }) => {
-  const [snap, setSnap] = useState(null);
-  const [foto, setFoto] = useState(null);
+import { useDimensions } from '../../hooks/Dimensions';
+import FotoCamera from '../../components/FotoCamera';
+import ImageLoading from '../../components/ImageLoading';
+import { firebase, db } from '../../firebase/config';
+import Locality from '../../components/Location';
 
-  const takeFoto = async () => {
-    const cameraStatus = await Camera.requestCameraPermissionsAsync();
-    console.log(cameraStatus);
-    const foto = await snap.takePictureAsync();
-    const { status } = await Location.requestForegroundPermissionsAsync();
-    console.log(status);
-    const location = await Location.getCurrentPositionAsync({});
-
-    console.log('location', location);
-    setFoto(foto.uri);
-    console.log('foto', foto);
-  };
-
-  const sendFoto = () => {
-    navigation.navigate('DefaultScreen', { foto });
-  };
-
-  return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity
-          activeOpacity={0.6}
-          onPress={() => navigation.navigate('Posts')}
-        >
-          <Image
-            style={styles.arrowBack}
-            source={require('../../components/Images/arrowLeft.png')}
-          ></Image>
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Создать публикацию</Text>
-      </View>
-      <View style={styles.heroContainer}>
-        <View style={styles.cameraCont}>
-          <Camera style={styles.camera} ref={setSnap}>
-            {foto && (
-              <View style={styles.takeFotoCont}>
-                <Image
-                  source={{ uri: foto }}
-                  style={{ height: 160, width: 200 }}
-                />
-              </View>
-            )}
-            <TouchableOpacity
-              style={styles.snapCont}
-              activeOpacity={0.6}
-              onPress={takeFoto}
-            >
-              <Text style={styles.snap}>SNAP</Text>
-            </TouchableOpacity>
-          </Camera>
-        </View>
-        <Text style={styles.loadFotoText}>Загрузите фото</Text>
-        <View style={styles.contInputs}>
-          <TextInput
-            style={styles.nameFotoInput}
-            placeholder={'Название'}
-          ></TextInput>
-        </View>
-        <View style={styles.contLocationInput}>
-          <View style={styles.locationIcon}>
-            <Image
-              source={require('../../components/Images/locationIcon.png')}
-            ></Image>
-          </View>
-          <View style={styles.locationInput}>
-            <TextInput placeholder={'Местность'}></TextInput>
-          </View>
-        </View>
-        <View>
-          <TouchableOpacity
-            onPress={sendFoto}
-            activeOpacity={0.6}
-            style={styles.publishBtn}
-          >
-            <Text style={styles.textPublishBtn}>Опубликовать</Text>
-          </TouchableOpacity>
-        </View>
-        <View></View>
-      </View>
-    </View>
-  );
+const initialState = {
+  name: '',
+  locality: '',
+  photo: '',
 };
 
+export default function CreatePostsScreen({ navigation }) {
+  const [isShowKeyboard, setIsShowKeyboard] = useState(false);
+  const { userId, login } = useSelector(state => state.auth);
+  const [state, setState] = useState(initialState);
+  const [isCamera, setIsCamera] = useState(false);
+  // const { dimensions } = useDimensions();
+  const [isFocused, setIsFocused] = useState({
+    name: false,
+    locality: false,
+  });
+
+  useEffect(() => {
+    navigation.setOptions({
+      tabBarStyle: { height: 0 },
+    });
+  }, [navigation]);
+
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
+      setIsShowKeyboard(true);
+    });
+    const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
+      setIsShowKeyboard(false);
+    });
+
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
+
+  function handleInputFocus(textInput) {
+    setIsFocused({
+      [textInput]: true,
+    });
+    setIsShowKeyboard(true);
+  }
+
+  function handleInputBlur(textInput) {
+    setIsFocused({
+      [textInput]: false,
+    });
+  }
+
+  function keyboardHide() {
+    setIsShowKeyboard(false);
+    Keyboard.dismiss();
+  }
+
+  async function getCamera() {
+    const { status } = await Camera.requestCameraPermissionsAsync();
+
+    if (status !== 'granted') {
+      Alert.alert('', 'Разрешение на показ камеры было отклонено', [
+        {
+          text: 'App info',
+          onPress: () => Linking.openSettings(),
+        },
+        {
+          text: 'Ok',
+        },
+      ]);
+
+      return;
+    }
+
+    setIsCamera(true);
+  }
+
+  async function uploadPhotoToServer() {
+    const response = await fetch(state.photo);
+    const file = await response.blob();
+    const uniquePhotoId = login + Date.now().toString();
+    await firebase.storage().ref(`postImage/${uniquePhotoId}`).put(file);
+
+    const processedPhoto = await firebase
+      .storage()
+      .ref('postImage')
+      .child(uniquePhotoId)
+      .getDownloadURL();
+
+    return processedPhoto;
+  }
+
+  async function uploadPostToServer() {
+    const photo = await uploadPhotoToServer();
+    try {
+      const createPost = await addDoc(collection(db, 'posts'), {
+        userId,
+        userLogin: login,
+        photo,
+        postName: state.name,
+        locality: state.locality,
+        commentsQuantity: 0,
+        likesQuantity: [],
+        date: Date.now(),
+      });
+      console.log('Post written with ID: ', createPost.id);
+    } catch (error) {
+      console.error('Error adding post: ', error);
+    }
+  }
+
+  function publish() {
+    uploadPostToServer();
+    setState(initialState);
+    navigation.goBack();
+  }
+
+  return (
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.containerScreen}
+    >
+      <TouchableWithoutFeedback onPress={keyboardHide}>
+        <View style={styles.containerScreen}>
+          {isCamera ? (
+            <FotoCamera setState={setState} setIsCamera={setIsCamera} />
+          ) : (
+            <>
+              <View style={styles.header}>
+                <Text style={styles.title}>Создать публикацию</Text>
+                <TouchableOpacity
+                  style={styles.arrowLeftContainer}
+                  onPress={() => navigation.goBack()}
+                >
+                  <Feather
+                    name="arrow-left"
+                    size={20}
+                    color="rgba(33, 33, 33, 0.8)"
+                  />
+                </TouchableOpacity>
+              </View>
+              <View style={styles.container}>
+                <View>
+                  <View style={styles.photo}>
+                    {state.photo && (
+                      <Image
+                        source={{
+                          uri: state.photo,
+                        }}
+                        style={styles.preview}
+                      />
+                    )}
+                    <TouchableOpacity
+                      onPress={getCamera}
+                      style={styles.photoIcon}
+                    >
+                      <Svg width={24} height={24} viewBox="0 0 24 24">
+                        <Path
+                          d="M11.9998 15.2C13.7671 15.2 15.1998 13.7673 15.1998 12C15.1998 10.2327 13.7671 8.79999 11.9998 8.79999C10.2325 8.79999 8.7998 10.2327 8.7998 12C8.7998 13.7673 10.2325 15.2 11.9998 15.2Z"
+                          fill="#BDBDBD"
+                        />
+                        <Path
+                          d="M9 2L7.17 4H4C2.9 4 2 4.9 2 6V18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6C22 4.9 21.1 4 20 4H16.83L15 2H9ZM12 17C9.24 17 7 14.76 7 12C7 9.24 9.24 7 12 7C14.76 7 17 9.24 17 12C17 14.76 14.76 17 12 17Z"
+                          fill="#BDBDBD"
+                        />
+                      </Svg>
+                    </TouchableOpacity>
+                  </View>
+                  <ImageLoading setState={setState} />
+                  <TextInput
+                    value={state.name}
+                    onChangeText={value =>
+                      setState(prevState => ({
+                        ...prevState,
+                        name: value,
+                      }))
+                    }
+                    placeholder="Название"
+                    placeholderTextColor={'#BDBDBD'}
+                    onFocus={() => handleInputFocus('name')}
+                    onBlur={() => handleInputBlur('name')}
+                    style={{
+                      ...styles.input,
+                      borderBottomColor: isFocused.name ? '#FF6C00' : '#E8E8E8',
+                    }}
+                  />
+                  <TextInput
+                    value={state.locality.name}
+                    onChangeText={value =>
+                      setState(prevState => ({
+                        ...prevState,
+                        locality: { name: value },
+                      }))
+                    }
+                    placeholder="Местность"
+                    placeholderTextColor={'#BDBDBD'}
+                    onFocus={() => handleInputFocus('locality')}
+                    onBlur={() => handleInputBlur('locality')}
+                    style={{
+                      ...styles.input,
+                      paddingLeft: 25,
+                      borderBottomColor: isFocused.locality
+                        ? '#FF6C00'
+                        : '#E8E8E8',
+                    }}
+                  />
+                  <Locality setState={setState} />
+                  <TouchableOpacity
+                    activeOpacity={0.8}
+                    style={{
+                      ...styles.btn,
+                      backgroundColor:
+                        state.name && state.locality && state.photo
+                          ? '#FF6C00'
+                          : '#F6F6F6',
+                    }}
+                    onPress={() => publish()}
+                  >
+                    <Text
+                      style={{
+                        ...styles.btnTitle,
+                        color:
+                          state.name && state.locality && state.photo
+                            ? '#FFF'
+                            : '#BDBDBD',
+                      }}
+                    >
+                      Опубликовать
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                {!isShowKeyboard && (
+                  <TouchableOpacity
+                    onPress={() => setState(initialState)}
+                    style={{
+                      ...styles.trash,
+                      width: '100%',
+                    }}
+                  >
+                    <Feather
+                      name="trash-2"
+                      size={20}
+                      color="rgba(218, 218, 218, 1)"
+                    />
+                  </TouchableOpacity>
+                )}
+              </View>
+            </>
+          )}
+        </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
+  );
+}
+
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#fff',
-    height: '100%',
-  },
+  containerScreen: { flex: 1, backgroundColor: '#FFF' },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    marginTop: 44,
-    marginBottom: 10,
-    paddingLeft: 15,
-    borderBottomWidth: 1,
-  },
-  headerTitle: {
-    marginLeft: 90,
-    marginBottom: 20,
-  },
-  arrowBack: {
-    width: 24,
-    height: 24,
-  },
-  heroContainer: {
-    paddingHorizontal: 15,
-  },
-  cameraCont: {
-    justifyContent: 'center',
-    height: '50%',
-  },
-  camera: {
-    alignItems: 'center',
     justifyContent: 'flex-end',
-    height: '100%',
-  },
-  snap: {
-    color: '#fff',
-  },
-  snapCont: {
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#ff0000',
-    borderRadius: 10,
-    width: 50,
-    marginBottom: 15,
-  },
-  takeFotoCont: {
-    position: 'absolute',
-    top: 30,
-    left: 10,
-    borderWidth: 1,
-    borderColor: '#fff',
-    paddingBottom: 10,
-  },
-  loadFotoText: {
-    marginTop: 8,
-  },
-  nameFotoInput: {
-    height: 50,
-    marginTop: 32,
+    paddingBottom: 11,
+    height: 88,
+    borderBottomColor: 'rgba(0, 0, 0,0.1 )',
     borderBottomWidth: 1,
   },
-  contLocationInput: {
-    flexDirection: 'row',
-    alignItems: 'baseline',
+  title: {
+    textAlign: 'center',
+    fontWeight: '500',
+    fontSize: 17,
+    lineHeight: 22,
+    letterSpacing: -0.408,
+    color: '#212121',
   },
-  locationInput: {
-    minHeight: 50,
-    marginTop: 15,
+  arrowLeftContainer: { position: 'absolute', bottom: 11, left: 20 },
+  container: {
+    flex: 1,
+    paddingHorizontal: 17,
+    justifyContent: 'space-between',
   },
-  locationIcon: {
-    width: 24,
-    height: 24,
+  photo: {
+    height: 240,
+    marginTop: 32,
+    borderRadius: 8,
+    backgroundColor: '#F6F6F6',
+    justifyContent: 'center',
+    alignItems: 'center',
+    objectFit: 'cover',
   },
-  publishBtn: {
-    marginTop: 63,
-    marginBottom: 16,
-    paddingVertical: 16,
-    backgroundColor: '#FF6C00',
-    borderRadius: 50,
+  photoIcon: {
+    position: 'absolute',
+    height: 60,
+    width: 60,
+    borderRadius: 30,
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  preview: {
     width: '100%',
-    height: 50,
+    height: '100%',
+    borderRadius: 8,
   },
-  textPublishBtn: {
-    fontWeight: 'normal',
+  input: {
+    marginBottom: 16,
+    paddingVertical: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E8E8E8',
+    fontWeight: '500',
     fontSize: 16,
     lineHeight: 19,
-    color: 'white',
-    textAlign: 'center',
+    color: '#212121',
+  },
+  btn: {
+    marginTop: 25,
+    paddingVertical: 16,
+    alignItems: 'center',
+    borderRadius: 100,
+  },
+  btnTitle: {
+    fontWeight: '400',
+    fontSize: 16,
+    lineHeight: 19,
+  },
+  trash: {
+    width: 70,
+    height: 40,
+    marginBottom: 34,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F6F6F6',
+    borderRadius: 20,
   },
 });
-
-export default CreatePostsScreen;

@@ -208,7 +208,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: '500',
     fontSize: 17,
-    fontFamily: 'Roboto-Medium',
     lineHeight: 22,
     letterSpacing: -0.408,
     color: '#212121',
@@ -244,7 +243,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.03)',
   },
   commentText: {
-    fontFamily: 'Roboto-Regular',
     fontWeight: '400',
     fontSize: 13,
     lineHeight: 18,
@@ -253,7 +251,6 @@ const styles = StyleSheet.create({
   commentDate: {
     marginTop: 8,
     textAlign: 'right',
-    fontFamily: 'Roboto-Regular',
     fontWeight: '400',
     fontSize: 10,
     lineHeight: 12,
@@ -265,7 +262,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#E8E8E8',
     borderRadius: 30,
-    fontFamily: 'Roboto-Medium',
     fontWeight: '500',
     fontSize: 16,
     lineHeight: 19,

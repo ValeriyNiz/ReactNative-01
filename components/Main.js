@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 
-import { authStateChangeUser } from '../../redux/auth/authOperations';
-import { useRoute } from '../../router';
+import { authStateChangeUser } from '../redux/auth/authOperations';
+import { useRoute } from '../router';
 
 const MyTheme = {
   colors: {

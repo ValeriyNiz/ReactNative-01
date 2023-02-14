@@ -3,7 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, ImageBackground } from 'react-native';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
-import { Main } from './components/Main/Main';
+import { Main } from './components/Main';
 
 const App = () => {
   return (

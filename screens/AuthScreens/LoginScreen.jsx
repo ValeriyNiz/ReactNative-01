@@ -117,7 +117,6 @@ const styles = StyleSheet.create({
     paddingBottom: 30,
   },
   title: {
-    fontFamily: 'Roboto',
     fontStyle: 'normal',
     fontWeight: '500',
     fontSize: 30,
@@ -129,7 +128,6 @@ const styles = StyleSheet.create({
     marginTop: 80,
   },
   textInput: {
-    fontFamily: 'Roboto',
     fontStyle: 'normal',
     fontWeight: '400',
     fontSize: 16,
@@ -143,7 +141,6 @@ const styles = StyleSheet.create({
   },
   text: {
     textAlign: 'center',
-    fontFamily: 'Roboto',
     fontStyle: 'normal',
     fontWeight: '400',
     fontSize: 16,
