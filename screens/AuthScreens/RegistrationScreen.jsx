@@ -23,8 +23,9 @@ const initialState = {
 
 const RegistrationScreen = ({ navigation }) => {
   const [isKeyboardShown, setIsKeyboardShown] = useState(false);
-  const [formData, setFormData] = useState(initialState);
 
+  const [formData, setFormData] = useState(initialState);
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -41,11 +42,16 @@ const RegistrationScreen = ({ navigation }) => {
     };
   }, []);
 
-  const onPressHandler = () => {
-    dispatch(authSignUpUser(formData));
+  async function onRegister() {
+    if (isLoading) {
+      return;
+    }
+    setIsLoading(true);
+    await authSignUpUser(dispatch, formData);
     setFormData(initialState);
+    setIsLoading(false);
     Keyboard.dismiss();
-  };
+  }
 
   return (
     <KeyboardAvoidingView
@@ -89,7 +95,7 @@ const RegistrationScreen = ({ navigation }) => {
             secureTextEntry={true}
           />
           <TouchableOpacity
-            onPress={() => onPressHandler()}
+            onPress={() => onRegister()}
             activeOpacity={0.6}
             style={styles.regBtn}
           >
