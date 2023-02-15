@@ -1,8 +1,7 @@
-import React from 'react';
-import { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Dimensions } from 'react-native';
 
-const AppContext = React.createContext({});
+const AppContext = createContext({});
 
 export const useDimensions = () => useContext(AppContext);
 
@@ -17,10 +16,11 @@ export const AppDimensions = ({ children }) => {
       const { width, height } = Dimensions.get('window');
       setDimensions({ width, height });
     };
-    const dimensions = Dimensions.addEventListener('change', onChange);
+
+    Dimensions.addEventListener('change', onChange);
 
     return () => {
-      dimensions.remove();
+      Dimensions.removeEventListener('change', onChange);
     };
   }, []);
 

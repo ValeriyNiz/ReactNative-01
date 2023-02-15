@@ -22,35 +22,26 @@ export default function FotoCamera({ setState, setIsCamera }) {
   const { dimensions } = useDimensions();
   const { height, width } = dimensions;
 
-  const [ratio, setRatio] = useState('4:3');
   const screenRatio = height / width;
-  const [isRatioSet, setIsRatioSet] = useState(false);
 
   async function prepareRatio() {
     if (Platform.OS === 'android') {
       const ratios = await cameraRef.current.getSupportedRatiosAsync();
 
-      let distances = {};
-      let realRatios = {};
-      let minDistance = null;
+      let minDistance;
+
       for (const ratio of ratios) {
         const parts = ratio.split(':');
         const realRatio = parseInt(parts[0]) / parseInt(parts[1]);
-        realRatios[ratio] = realRatio;
 
         const distance = screenRatio - realRatio;
-        distances[ratio] = realRatio;
-        if (minDistance == null) {
+
+        if (!minDistance || (distance >= 0 && distance < minDistance)) {
           minDistance = ratio;
-        } else {
-          if (distance >= 0 && distance < distances[minDistance]) {
-            minDistance = ratio;
-          }
         }
       }
 
       setRatio(minDistance);
-
       setIsRatioSet(true);
     }
   }

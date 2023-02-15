@@ -258,7 +258,7 @@ export default function CreatePostsScreen({ navigation }) {
                     onPress={() => setState(initialState)}
                     style={{
                       ...styles.trash,
-                      width: '100%',
+                      // left: dimensions.width / 2 - 52,
                     }}
                   >
                     <Feather
