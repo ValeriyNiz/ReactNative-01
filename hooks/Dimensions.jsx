@@ -5,7 +5,7 @@ const AppContext = createContext({});
 
 export const useDimensions = () => useContext(AppContext);
 
-export const AppDimensions = ({ children }) => {
+export const AppDimensionsProvider = ({ children }) => {
   const [dimensions, setDimensions] = useState({
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
@@ -17,11 +17,9 @@ export const AppDimensions = ({ children }) => {
       setDimensions({ width, height });
     };
 
-    Dimensions.addEventListener('change', onChange);
+    const subscription = Dimensions.addEventListener('change', onChange);
 
-    return () => {
-      Dimensions.removeEventListener('change', onChange);
-    };
+    return () => subscription?.remove();
   }, []);
 
   return (

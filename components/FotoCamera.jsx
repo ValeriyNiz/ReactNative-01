@@ -27,7 +27,6 @@ export default function FotoCamera({ setState, setIsCamera }) {
   async function prepareRatio() {
     if (Platform.OS === 'android') {
       const ratios = await cameraRef.current.getSupportedRatiosAsync();
-
       let minDistance;
 
       for (const ratio of ratios) {
@@ -171,7 +170,6 @@ export default function FotoCamera({ setState, setIsCamera }) {
         onCameraReady={setCameraReady}
         style={styles.camera}
         ref={cameraRef}
-        ratio={ratio}
       >
         <TouchableOpacity
           onPress={noPhoto}

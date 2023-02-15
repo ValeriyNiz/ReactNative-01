@@ -21,7 +21,7 @@ import Svg, { Path } from 'react-native-svg';
 import { useDimensions } from '../../hooks/Dimensions';
 import FotoCamera from '../../components/FotoCamera';
 import ImageLoading from '../../components/ImageLoading';
-import { firebase, db } from '../../firebase/config';
+import { db, uploadImage } from '../../firebase/config';
 import Locality from '../../components/Location';
 
 const initialState = {
@@ -35,7 +35,7 @@ export default function CreatePostsScreen({ navigation }) {
   const { userId, login } = useSelector(state => state.auth);
   const [state, setState] = useState(initialState);
   const [isCamera, setIsCamera] = useState(false);
-  // const { dimensions } = useDimensions();
+  const { dimensions } = useDimensions();
   const [isFocused, setIsFocused] = useState({
     name: false,
     locality: false,
@@ -102,25 +102,21 @@ export default function CreatePostsScreen({ navigation }) {
   async function uploadPhotoToServer() {
     const response = await fetch(state.photo);
     const file = await response.blob();
-    const uniquePhotoId = login + Date.now().toString();
-    await firebase.storage().ref(`postImage/${uniquePhotoId}`).put(file);
+    const uniquePhotoId = `${login || ''}${Date.now().toString()}.jpg`;
 
-    const processedPhoto = await firebase
-      .storage()
-      .ref('postImage')
-      .child(uniquePhotoId)
-      .getDownloadURL();
+    const processedPhoto = await uploadImage(uniquePhotoId, file);
 
     return processedPhoto;
   }
 
   async function uploadPostToServer() {
-    const photo = await uploadPhotoToServer();
     try {
+      const photo = await uploadPhotoToServer();
+      console.log('photo', photo);
       const createPost = await addDoc(collection(db, 'posts'), {
         userId,
         userLogin: login,
-        photo,
+        photo: `https://firebasestorage.googleapis.com/v0/b/${photo.metadata.bucket}/o/${photo.metadata.fullPath}?alt=media`,
         postName: state.name,
         locality: state.locality,
         commentsQuantity: 0,
@@ -258,7 +254,7 @@ export default function CreatePostsScreen({ navigation }) {
                     onPress={() => setState(initialState)}
                     style={{
                       ...styles.trash,
-                      // left: dimensions.width / 2 - 52,
+                      left: dimensions.width / 2 - 52,
                     }}
                   >
                     <Feather

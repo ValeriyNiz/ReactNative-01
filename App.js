@@ -4,6 +4,7 @@ import { StyleSheet, View, ImageBackground } from 'react-native';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import { Main } from './components/Main';
+import { AppDimensionsProvider } from './hooks/Dimensions';
 
 const App = () => {
   return (
@@ -13,7 +14,9 @@ const App = () => {
         style={styles.imageBg}
       >
         <Provider store={store}>
-          <Main />
+          <AppDimensionsProvider>
+            <Main />
+          </AppDimensionsProvider>
         </Provider>
 
         <StatusBar style="auto" />

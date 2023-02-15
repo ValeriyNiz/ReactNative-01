@@ -1,6 +1,8 @@
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
+import { getFirestore } from 'firebase/firestore';
+import { getStorage, ref, uploadBytes } from 'firebase/storage';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyCpoU8ZZ9t4PzaCVTy_Be1AeAfJxIuCYuY',
@@ -14,5 +16,20 @@ const firebaseConfig = {
 
 export const firebaseApp = firebase.initializeApp(firebaseConfig);
 
-export const db = firebaseApp.firestore;
+export const db = getFirestore(firebaseApp);
 export const auth = firebase.auth;
+export const storage = getStorage(firebaseApp);
+export const uploadImage = async (fileName, file) => {
+  const storageRef = ref(storage, `images/${fileName}`);
+
+  console.log(storageRef);
+
+  try {
+    const test = await uploadBytes(storageRef, file);
+    console.log('test', test);
+  } catch (err) {
+    console.log('err', err);
+  }
+
+  return storageRef;
+};
