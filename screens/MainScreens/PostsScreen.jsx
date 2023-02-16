@@ -1,4 +1,5 @@
 import React from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import DefaultPostsScreen from '../NestedScreens/DefaultPostsScreen';
 import CommentsScreen from '../NestedScreens/CommentsScreen';

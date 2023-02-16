@@ -26,10 +26,7 @@ export const uploadImage = async (fileName, file) => {
 
   try {
     const test = await uploadBytes(storageRef, file);
-    console.log('test', test);
-  } catch (err) {
-    console.log('err', err);
-  }
+  } catch (err) {}
 
   return storageRef;
 };

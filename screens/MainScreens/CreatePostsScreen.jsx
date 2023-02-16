@@ -112,18 +112,16 @@ export default function CreatePostsScreen({ navigation }) {
   async function uploadPostToServer() {
     try {
       const photo = await uploadPhotoToServer();
-      console.log('photo', photo);
       const createPost = await addDoc(collection(db, 'posts'), {
         userId,
         userLogin: login,
-        photo: `https://firebasestorage.googleapis.com/v0/b/${photo.metadata.bucket}/o/${photo.metadata.fullPath}?alt=media`,
+        photo: `https://firebasestorage.googleapis.com/v0/b/${photo._location.bucket}/o/${photo._location.path}?alt=media`,
         postName: state.name,
         locality: state.locality,
         commentsQuantity: 0,
         likesQuantity: [],
         date: Date.now(),
       });
-      console.log('Post written with ID: ', createPost.id);
     } catch (error) {
       console.error('Error adding post: ', error);
     }

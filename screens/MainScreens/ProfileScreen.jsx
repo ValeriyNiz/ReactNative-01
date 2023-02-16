@@ -43,7 +43,6 @@ export default function ProfileScreen({ navigation }) {
   const dispatch = useDispatch();
 
   function getUserPosts() {
-    console.log(db);
     onSnapshot(
       query(collection(db, 'posts'), where('userId', '==', userId)),
       data => {
