@@ -6,6 +6,23 @@ import { store } from './redux/store';
 import { Main } from './components/Main';
 import { AppDimensionsProvider } from './hooks/Dimensions';
 
+import { LogBox } from 'react-native';
+
+const ignoreWarns = ['AsyncStorage has been extracted from react-native'];
+
+const warn = console.warn;
+
+console.warn = (...arg) => {
+  for (const warning of ignoreWarns) {
+    if (arg[0].startsWith(warning)) {
+      return;
+    }
+  }
+  warn(...arg);
+};
+
+LogBox.ignoreLogs(ignoreWarns);
+
 const App = () => {
   return (
     <View style={styles.container}>

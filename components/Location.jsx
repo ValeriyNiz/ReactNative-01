@@ -17,26 +17,31 @@ export default function Locality({ setState }) {
           text: 'Ok',
         },
       ]);
+
       return;
     }
 
     const location = await Location.getCurrentPositionAsync();
+
     const address = await Location.reverseGeocodeAsync(location.coords);
 
-    if (!address[0].region) {
-      address[0].region = address[0].city;
+    let regionName;
+
+    if (address[0].region) {
+      regionName = address[0].region;
+    } else {
+      regionName = address[0].city;
     }
 
     setState(prevState => ({
       ...prevState,
       locality: {
-        name: `${address[0].region}, ${address[0].country}`,
+        name: `${regionName}, ${address[0].country}`,
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
       },
     }));
   }
-
   return (
     <TouchableOpacity onPress={getLocation}>
       <Feather

@@ -13,14 +13,13 @@ const MyTheme = {
 };
 
 export const Main = () => {
-  const { stateChange } = useSelector(state => state.auth);
+  const authState = useSelector(state => state.auth);
   const dispatch = useDispatch();
 
   useEffect(() => {
     authStateChangeUser(dispatch);
-  }, []);
+  }, [dispatch]);
 
-  const routing = useRoute(stateChange);
-
+  const routing = useRoute(authState.stateChange);
   return <NavigationContainer theme={MyTheme}>{routing}</NavigationContainer>;
 };
