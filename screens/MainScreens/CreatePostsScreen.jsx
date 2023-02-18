@@ -115,7 +115,9 @@ export default function CreatePostsScreen({ navigation }) {
       const createPost = await addDoc(collection(db, 'posts'), {
         userId,
         userLogin: login,
-        photo: `https://firebasestorage.googleapis.com/v0/b/${photo._location.bucket}/o/${photo._location.path}?alt=media`,
+        photo: `https://firebasestorage.googleapis.com/v0/b/${
+          photo._location.bucket
+        }/o/${photo._location.path.replace('/', '%2F')}?alt=media`,
         postName: state.name,
         locality: state.locality,
         commentsQuantity: 0,

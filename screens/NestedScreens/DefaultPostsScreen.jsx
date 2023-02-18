@@ -73,6 +73,7 @@ export default function DefaultScreenPosts({ navigation }) {
 
   if (posts) {
     posts.sort((x, y) => y.date - x.date);
+    console.log(posts);
     return (
       <View style={styles.container}>
         <View style={styles.header}>

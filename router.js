@@ -23,11 +23,7 @@ export const useRoute = isAuth => {
     );
   }
   return (
-    <MainTab.Navigator
-      screenOptions={{
-        tabBarShowLabel: false,
-      }}
-    >
+    <MainTab.Navigator>
       <MainTab.Screen
         name="Posts"
         component={PostsScreen}
@@ -39,7 +35,7 @@ export const useRoute = isAuth => {
         }}
       />
       <MainTab.Screen
-        name="CreatePostsScreen"
+        name="CreatePost"
         component={CreatePostsScreen}
         options={{
           headerShown: false,

@@ -19,6 +19,7 @@ export default function FotoCamera({ setState, setIsCamera }) {
   const cameraRef = useRef();
   const [type, setType] = useState(CameraType.back);
   const [photo, setPhoto] = useState(null);
+  const [ratioState, setRatio] = useState(null);
   const { dimensions } = useDimensions();
   const { height, width } = dimensions;
 
@@ -41,12 +42,11 @@ export default function FotoCamera({ setState, setIsCamera }) {
       }
 
       setRatio(minDistance);
-      setIsRatioSet(true);
     }
   }
 
   async function setCameraReady() {
-    if (!isRatioSet) {
+    if (!ratioState) {
       await prepareRatio();
     }
   }
@@ -170,6 +170,7 @@ export default function FotoCamera({ setState, setIsCamera }) {
         onCameraReady={setCameraReady}
         style={styles.camera}
         ref={cameraRef}
+        ratio={ratioState}
       >
         <TouchableOpacity
           onPress={noPhoto}
