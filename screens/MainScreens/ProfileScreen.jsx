@@ -28,7 +28,7 @@ import {
   authChangeUserPhoto,
   authSignOutUser,
 } from '../../redux/auth/authOperations';
-import { firebase, db } from '../../firebase/config';
+import { storage, db } from '../../firebase/config';
 import { useDimensions } from '../../hooks/Dimensions';
 
 const initialState = { photo: '' };
@@ -97,15 +97,12 @@ export default function ProfileScreen({ navigation }) {
   async function uploadPhotoToServer() {
     const response = await fetch(state.photo);
     const file = await response.blob();
-    const uniquePhotoId = state.login + Date.now().toString();
-    await firebase.storage().ref(`userPhoto/${uniquePhotoId}`).put(file);
+    const uniquePhotoId = `${login || ''}${Date.now().toString()}.jpg`;
 
-    const processedPhoto = await firebase
-      .storage()
-      .ref('userPhoto')
-      .child(uniquePhotoId)
-      .getDownloadURL();
-
+    const processedPhoto = await uploadImage(
+      `userPhoto/${uniquePhotoId}`,
+      file
+    );
     return processedPhoto;
   }
 

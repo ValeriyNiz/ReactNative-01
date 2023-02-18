@@ -104,7 +104,7 @@ export default function CreatePostsScreen({ navigation }) {
     const file = await response.blob();
     const uniquePhotoId = `${login || ''}${Date.now().toString()}.jpg`;
 
-    const processedPhoto = await uploadImage(uniquePhotoId, file);
+    const processedPhoto = await uploadImage(`images/${uniquePhotoId}`, file);
 
     return processedPhoto;
   }

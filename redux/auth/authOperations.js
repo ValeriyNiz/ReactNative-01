@@ -76,7 +76,7 @@ export async function authStateChangeUser(dispatch) {
 
 export async function authChangeUserPhoto(dispatch, photo) {
   const user = getAuth(auth);
-
+  console.log(photo);
   await updateProfile(user.currentUser, {
     photoURL: photo,
   });

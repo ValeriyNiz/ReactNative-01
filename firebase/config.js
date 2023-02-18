@@ -19,10 +19,8 @@ export const firebaseApp = firebase.initializeApp(firebaseConfig);
 export const db = getFirestore(firebaseApp);
 export const auth = firebase.auth;
 export const storage = getStorage(firebaseApp);
-export const uploadImage = async (fileName, file) => {
-  const storageRef = ref(storage, `images/${fileName}`);
-
-  console.log(storageRef);
+export const uploadImage = async (filePath, file) => {
+  const storageRef = ref(storage, filePath);
 
   try {
     const test = await uploadBytes(storageRef, file);
