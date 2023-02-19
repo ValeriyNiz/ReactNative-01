@@ -1,2 +1,2 @@
 You can launch this app using the Expo Go app and follow the link:
-exp://exp.host/@niza33/ReactNative?release-channel=default
+https://expo.dev/@niza33/ReactNative?serviceType=classic&distribution=expo-go
