@@ -57,6 +57,7 @@ export async function authSignOutUser(dispatch) {
 
 export async function authStateChangeUser(dispatch) {
   onAuthStateChanged(getAuth(auth), user => {
+    console.log(user);
     if (user) {
       dispatch(
         authSlice.actions.authStateChange({
@@ -75,19 +76,28 @@ export async function authStateChangeUser(dispatch) {
 }
 
 export async function authChangeUserPhoto(dispatch, photo) {
-  const user = getAuth(auth);
-  console.log(photo);
-  await updateProfile(user.currentUser, {
-    photoURL: photo,
-  });
+  try {
+    const user = getAuth(auth);
+    const photoResult = photo
+      ? `https://firebasestorage.googleapis.com/v0/b/${
+          photo._location.bucket
+        }/o/${photo._location.path.replace('/', '%2F')}?alt=media`
+      : '';
 
-  const { displayName, uid, photoURL } = user.currentUser;
+    await updateProfile(user.currentUser, {
+      photoURL: photoResult,
+    });
 
-  dispatch(
-    authSlice.actions.updateUserProfile({
-      userId: uid,
-      login: displayName,
-      userPhoto: photoURL,
-    })
-  );
+    const { displayName, uid, photoURL } = user.currentUser;
+
+    dispatch(
+      authSlice.actions.updateUserProfile({
+        userId: uid,
+        login: displayName,
+        userPhoto: photoURL,
+      })
+    );
+  } catch (err) {
+    console.log(err);
+  }
 }

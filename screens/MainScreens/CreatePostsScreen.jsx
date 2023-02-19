@@ -112,7 +112,7 @@ export default function CreatePostsScreen({ navigation }) {
   async function uploadPostToServer() {
     try {
       const photo = await uploadPhotoToServer();
-      const createPost = await addDoc(collection(db, 'posts'), {
+      await addDoc(collection(db, 'posts'), {
         userId,
         userLogin: login,
         photo: `https://firebasestorage.googleapis.com/v0/b/${

@@ -28,7 +28,7 @@ import {
   authChangeUserPhoto,
   authSignOutUser,
 } from '../../redux/auth/authOperations';
-import { storage, db } from '../../firebase/config';
+import { uploadImage, db } from '../../firebase/config';
 import { useDimensions } from '../../hooks/Dimensions';
 
 const initialState = { photo: '' };
@@ -70,7 +70,7 @@ export default function ProfileScreen({ navigation }) {
   async function getCamera() {
     if (userPhoto) {
       setState({ photo: '' });
-      authChangeUserPhoto(dispatch, (state.photo = ''));
+      authChangeUserPhoto(dispatch);
 
       return;
     }
