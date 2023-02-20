@@ -18,7 +18,6 @@ import {
   onSnapshot,
   doc,
   updateDoc,
-  increment,
 } from 'firebase/firestore';
 import { useSelector } from 'react-redux';
 import { Feather } from '@expo/vector-icons';
@@ -32,10 +31,6 @@ export default function CommentsScreen({ navigation, route }) {
   const [isFocused, setIsFocused] = useState(false);
   const { postId, photo } = route.params;
 
-  useEffect(() => {
-    getAllComments();
-  }, []);
-
   function handleInputFocus() {
     setIsFocused(true);
   }
@@ -48,38 +43,53 @@ export default function CommentsScreen({ navigation, route }) {
     Keyboard.dismiss();
   }
 
-  const today = new Date(Date.now());
-  const date = `${today.toUTCString().split(' ')[1]} ${new Intl.DateTimeFormat(
-    'en-US',
-    { month: 'long' }
-  ).format(today)}, ${today.getFullYear()} |${today
-    .toUTCString()
-    .slice(16, 22)}`;
+  const createComment = () => {
+    sendCommentToServer();
+    setComment('');
+    keyboardHide();
+  };
 
-  async function createComment() {
-    if (comment) {
-      await addDoc(collection(db, 'posts', postId, 'comments'), {
+  const sendCommentToServer = async () => {
+    const today = new Date(Date.now());
+    const date = `${
+      today.toUTCString().split(' ')[1]
+    } ${new Intl.DateTimeFormat('en-US', { month: 'long' }).format(
+      today
+    )}, ${today.getFullYear()} |${today.toUTCString().slice(16, 22)}`;
+    try {
+      const dbRef = doc(db, 'posts', postId);
+      await updateDoc(dbRef, {
+        commentsQuantity: allComments.length + 1,
+      });
+      await addDoc(collection(dbRef, 'comments'), {
         comment,
         userPhoto,
         date,
         dateForOrder: Date.now(),
       });
-      setComment('');
-      updateDoc(doc(db, 'posts', postId), {
-        commentsQuantity: increment(1),
-      });
+    } catch (error) {
+      console.log('error.message', error.message);
     }
-    keyboardHide();
-  }
+  };
 
-  async function getAllComments() {
-    onSnapshot(collection(db, 'posts', postId, 'comments'), data => {
-      setAllComments(data.docs.map(doc => ({ ...doc.data(), id: doc.id })));
-    });
-  }
+  const getAllComments = async () => {
+    try {
+      const dbRef = doc(db, 'posts', postId);
+      onSnapshot(collection(dbRef, 'comments'), data =>
+        setAllComments(data.docs.map(doc => ({ ...doc.data() })))
+      );
+    } catch (error) {
+      console.log(`getAllComments`, error);
+    }
+  };
 
   if (allComments) {
     allComments.sort((x, y) => x.dateForOrder - y.dateForOrder);
+
+    useEffect(() => {
+      getAllComments();
+    }, []);
+
     return (
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -108,6 +118,7 @@ export default function CommentsScreen({ navigation, route }) {
                 <SafeAreaView>
                   <FlatList
                     data={allComments}
+                    keyExtractor={allComments.id}
                     renderItem={({ item }) => (
                       <View
                         style={{
@@ -137,13 +148,12 @@ export default function CommentsScreen({ navigation, route }) {
                         </View>
                       </View>
                     )}
-                    keyExtractor={item => item.id}
                   />
                 </SafeAreaView>
                 <View>
                   <TextInput
                     value={comment}
-                    onChangeText={value => setComment(value)}
+                    onChangeText={setComment}
                     placeholder="Comment..."
                     placeholderTextColor={'#BDBDBD'}
                     onFocus={() => handleInputFocus()}
@@ -158,7 +168,7 @@ export default function CommentsScreen({ navigation, route }) {
                   <TouchableOpacity
                     activeOpacity={0.8}
                     style={styles.btn}
-                    onPress={() => createComment()}
+                    onPress={createComment}
                   >
                     <Feather name="arrow-up" size={24} color="#FFF" />
                   </TouchableOpacity>
