@@ -27,31 +27,17 @@ import { db } from '../../firebase/config';
 
 export default function CommentsScreen({ navigation, route }) {
   const { userPhoto } = useSelector(state => state.auth);
-  const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [comment, setComment] = useState('');
   const [allComments, setAllComments] = useState([]);
   const [isFocused, setIsFocused] = useState(false);
   const { postId, photo } = route.params;
 
   useEffect(() => {
-    const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
-      setIsShowKeyboard(true);
-    });
-    const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
-      setIsShowKeyboard(false);
-    });
-
     getAllComments();
-
-    return () => {
-      showSubscription.remove();
-      hideSubscription.remove();
-    };
   }, []);
 
   function handleInputFocus() {
     setIsFocused(true);
-    setIsShowKeyboard(true);
   }
 
   function handleInputBlur() {
@@ -59,7 +45,6 @@ export default function CommentsScreen({ navigation, route }) {
   }
 
   function keyboardHide() {
-    setIsShowKeyboard(false);
     Keyboard.dismiss();
   }
 
